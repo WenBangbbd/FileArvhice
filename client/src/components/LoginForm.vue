@@ -1,62 +1,43 @@
 <template>
-  <div id="loginform">
-    <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-from-item >
+  <div id="container">
+    <a-form id="loginform" :model="formState" :layout="formState.layout">
+      <a-form-item>
         <login-tabs class="logintabs"></login-tabs>
-      </a-from-item>
-      <a-form-item label="Activity name">
-        <a-input v-model:value="formState.name" />
       </a-form-item>
-      <a-form-item label="Activity zone">
-        <a-select
-          v-model:value="formState.region"
-          placeholder="please select your zone"
-        >
-          <a-select-option value="shanghai">Zone one</a-select-option>
-          <a-select-option value="beijing">Zone two</a-select-option>
-        </a-select>
+      <a-form-item>
+        <a-checkbox v-model:checked="checked">记住密码</a-checkbox>
+        <a href="" class="forget"> 忘记密码？</a>
       </a-form-item>
-      <a-form-item label="Activity time">
-        <a-date-picker
-          v-model:value="formState.date1"
-          show-time
-          type="date"
-          placeholder="Pick a date"
-          style="width: 100%"
-        />
+      <a-form-item>
+        <a-button type="primary" block>登录</a-button>
       </a-form-item>
-      <a-form-item label="Instant delivery">
-        <a-switch v-model:checked="formState.delivery" />
-      </a-form-item>
-      <a-form-item label="Activity type">
-        <a-checkbox-group v-model:value="formState.type">
-          <a-checkbox value="1" name="type">Online</a-checkbox>
-          <a-checkbox value="2" name="type">Promotion</a-checkbox>
-          <a-checkbox value="3" name="type">Offline</a-checkbox>
-        </a-checkbox-group>
-      </a-form-item>
-      <a-form-item label="Resources">
-        <a-radio-group v-model:value="formState.resource">
-          <a-radio value="1">Sponsor</a-radio>
-          <a-radio value="2">Venue</a-radio>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item label="Activity form">
-        <a-input v-model:value="formState.desc" type="textarea" />
-      </a-form-item>
-      <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" @click="onSubmit">Create</a-button>
-        <a-button style="margin-left: 10px">Cancel</a-button>
+      <a-form-item>
+        <a href="">Sign in with</a>
+        <span class="otherlogin">
+          <a href=""><WechatOutlined /></a>
+          <a href=""><AlipayCircleOutlined /></a>
+          <a href=""><QqOutlined /></a>
+        </span>
+       <router-link class="signup" :to="{ name: 'register' }">Sign up</router-link>
       </a-form-item>
     </a-form>
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRaw } from "vue";
+import { defineComponent, reactive, toRaw, ref } from "vue";
 import LoginTabls from "./LoginTabs.vue";
-
+import {
+  WechatOutlined,
+  AlipayCircleOutlined,
+  QqOutlined,
+} from "@ant-design/icons-vue";
 export default defineComponent({
-  components: { "login-tabs": LoginTabls },
+  components: {
+    "login-tabs": LoginTabls,
+    WechatOutlined,
+    AlipayCircleOutlined,
+    QqOutlined,
+  },
   setup() {
     const formState = reactive({
       name: "",
@@ -66,8 +47,8 @@ export default defineComponent({
       type: [],
       resource: "",
       desc: "",
+      layout: "vertical",
     });
-
     const onSubmit = () => {
       console.log("submit!", toRaw(formState));
     };
@@ -81,27 +62,43 @@ export default defineComponent({
       },
       formState,
       onSubmit,
+      checked: ref(false),
     };
   },
 });
 </script>
 
 <style lang="less" scoped>
-#loginform {
-  text-align: center;
-  // width: 500px;
-  .ant-form {
-    width: 500px;
-    display: block;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin: auto;
-    .ant-from-item
-    {
-      margin: ;
+#container {
+  width: 700px;
+  margin: 0 auto;
+  #loginform {
+    .ant-form-item {
+      width: 400px;
+      margin: 0 auto;
+      .otherlogin {
+        a {
+          margin-left: 20px;
+        }
+      }
+      .signup{
+        position: absolute;
+        right: 0;
+      }
     }
-    .logintabs {
-      margin: 10px 20px 20px 20px;
+    .ant-form {
+      width: 500px;
+      display: block;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin: auto;
+      .logintabs {
+        margin: 10px 20px 20px 20px;
+      }
+    }
+    .forget {
+      position: absolute;
+      right: 0;
     }
   }
 }

@@ -4,7 +4,7 @@
       <div class="components-input-demo-presuffix">
         <a-input placeholder="Basic usage" v-model:value="userName">
           <template #prefix>
-            <user-outlined type="user" />
+           <UserOutlined />
           </template>
           <template #suffix>
             <a-tooltip title="Extra information">
@@ -14,7 +14,16 @@
         </a-input>
         <br />
         <br />
-        <a-input prefix="￥" suffix="RMB" />
+      <a-input placeholder="Basic usage" v-model:value="userName">
+          <template #prefix>
+           <LockOutlined />
+          </template>
+          <template #suffix>
+            <a-tooltip title="Extra information">
+           <EyeInvisibleOutlined />
+            </a-tooltip>
+          </template>
+        </a-input>
       </div>
     </a-tab-pane>
     <a-tab-pane key="2" tab="Tab 2" force-render>
@@ -38,13 +47,15 @@
 </template>
 
 
-<script lang="ts">
+<script lang="ts" scoped>
 import { defineComponent, ref } from "vue";
-import { UserOutlined, InfoCircleOutlined } from "@ant-design/icons-vue";
+import { UserOutlined, InfoCircleOutlined,LockOutlined,EyeInvisibleOutlined } from "@ant-design/icons-vue";
 export default defineComponent({
   components: {
     UserOutlined,
     InfoCircleOutlined,
+    LockOutlined,
+    EyeInvisibleOutlined
   },
   setup() {
     const userName = ref("");

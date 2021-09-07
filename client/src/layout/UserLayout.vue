@@ -16,18 +16,22 @@
         </div>
       </a-layout-header>
       <a-layout-content>
-        <login-form></login-form>
+       <router-view></router-view>
       </a-layout-content>
-      <a-layout-footer>Footer</a-layout-footer>
+      <a-layout-footer>
+        <div class="link">
+          <a href="">帮助</a>
+          <a href="">隐私</a>
+          <a href="">条款</a>
+        </div>
+        <div>Copyright © 2018 vueComponent</div>
+      </a-layout-footer>
     </a-layout>
   </div>
 </template>
 
 <script>
-import LoginForm from "../components/LoginForm";
-
 export default {
-  components: { "login-form": LoginForm },
   name: "UserLayout",
 };
 </script>
@@ -67,6 +71,16 @@ export default {
       color: white;
       line-height: 20px;
     }
+  }
+  .ant-layout-footer{
+    .link{
+      a{
+        margin-left: 10px;
+      }
+    }
+    text-align: center;
+    width: 500px;
+    margin: 0 auto;
   }
 }
 </style>
