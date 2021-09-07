@@ -9,12 +9,12 @@ const routes=[{
         { 
             name: 'login',
             path:'/user/login',
-            component:()=>import('../components/LoginForm'),
+            component:()=>import('../views/user/LoginForm'),
         },
         {
             name: 'register',
             path:'/user/register',
-            component:()=>import('../components/RegisterForm')
+            component:()=>import('../views/user/RegisterForm')
         }
     ]
 }]

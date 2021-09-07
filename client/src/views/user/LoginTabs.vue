@@ -1,8 +1,8 @@
 <template>
   <a-tabs v-model:activeKey="activeKey">
     <a-tab-pane key="1" tab="Tab 1">
-      <div class="components-input-demo-presuffix">
-        <a-input placeholder="Basic usage" v-model:value="userName">
+        <a-form-item name="username">
+          <a-input :rules='rules'  placeholder="Basic usage" v-model:value="userName">
           <template #prefix>
            <UserOutlined />
           </template>
@@ -12,8 +12,7 @@
             </a-tooltip>
           </template>
         </a-input>
-        <br />
-        <br />
+        </a-form-item>
       <a-input placeholder="Basic usage" v-model:value="userName">
           <template #prefix>
            <LockOutlined />
@@ -24,7 +23,6 @@
             </a-tooltip>
           </template>
         </a-input>
-      </div>
     </a-tab-pane>
     <a-tab-pane key="2" tab="Tab 2" force-render>
       <div class="components-input-demo-presuffix">
@@ -59,9 +57,15 @@ export default defineComponent({
   },
   setup() {
     const userName = ref("");
+    const rules={
+       username:[
+        {required:true,message:'必须',trigger:'blur'}
+      ]
+    }
     return {
       userName,
       activeKey: ref("1"),
+      rules
     };
   },
 });
