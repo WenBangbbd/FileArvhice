@@ -41,10 +41,21 @@
             </a-input>
           </a-form-item>
           <br />
-          <a-form-item name="vertifyCode">
-            <a-input  v-model:value="vertifyCode" placeholder="请输入验证码" />
-            <a-button type="primary">发送验证码</a-button>
-          </a-form-item>
+          <a-row>
+            <a-col :span="16">
+              <a-form-item name="vertifyCode">
+                <a-input
+                  v-model:value="formState.vertifyCode"
+                  placeholder="请输入验证码"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="6" offset="2">
+              <a-form-item>
+                <a-button type="primary">发送验证码</a-button>
+              </a-form-item>
+            </a-col>
+          </a-row>
         </a-tab-pane>
       </a-tabs>
       <a-form-item>
@@ -100,12 +111,14 @@ export default defineComponent({
           trigger: "change",
         },
       ],
-      vertifyCode:[{required:true,message:'请输入验证码',trigger:'change'}]
+      vertifyCode: [
+        { required: true, message: "请输入验证码", trigger: "blur" },
+      ],
     };
     const formState = reactive({
       userName: "",
       password: "",
-      mobile:"",
+      mobile: "",
       region: undefined,
       date1: undefined,
       delivery: false,
@@ -113,8 +126,8 @@ export default defineComponent({
       resource: "",
       desc: "",
       layout: "vertical",
+      vertifyCode: "",
     });
-    const vertifyCode=ref("");
     const onSubmit = () => {
       console.log("submit!", toRaw(formState));
     };
@@ -130,7 +143,6 @@ export default defineComponent({
       formState,
       onSubmit,
       checked: ref(false),
-      vertifyCode
     };
   },
 });
@@ -141,33 +153,22 @@ export default defineComponent({
   width: 700px;
   margin: 0 auto;
   #loginform {
-    .ant-form-item {
-      width: 400px;
-      margin: 0 auto;
-      .otherlogin {
-        a {
-          margin-left: 20px;
-        }
-      }
-      .signup {
-        position: absolute;
-        right: 0;
+    .otherlogin {
+      a {
+        margin-left: 20px;
       }
     }
-    .ant-form {
-      width: 500px;
-      display: block;
-      margin-top: 0;
-      margin-bottom: 0;
-      margin: auto;
-      .logintabs {
-        margin: 10px 20px 20px 20px;
-      }
-    }
-    .forget {
+    .signup {
       position: absolute;
       right: 0;
     }
+  }
+  width: 400px;
+  display: block;
+  margin: 0 auto;
+  .forget {
+    position: absolute;
+    right: 0;
   }
 }
 </style>
