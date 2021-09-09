@@ -52,7 +52,9 @@
             </a-col>
             <a-col :span="6" offset="2">
               <a-form-item>
-                <a-button type="primary">发送验证码</a-button>
+                <a-button @click="doVertifyButtonClick()" type="primary"
+                  >发送验证码</a-button
+                >
               </a-form-item>
             </a-col>
           </a-row>
@@ -81,6 +83,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRaw, ref } from "vue";
+import { sendVertifyCode } from "../../api/login";
 import {
   WechatOutlined,
   AlipayCircleOutlined,
@@ -131,8 +134,11 @@ export default defineComponent({
     const onSubmit = () => {
       console.log("submit!", toRaw(formState));
     };
-
+    const doVertifyButtonClick = async () => {
+      await sendVertifyCode(formState.mobile);
+    };
     return {
+      doVertifyButtonClick,
       rules,
       labelCol: {
         span: 4,
