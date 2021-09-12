@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl.EFCore\FileArchive.AccessControl.EFCore.csproj" />
-    <ProjectReference Include="..\File\src\FileArchive.FileService.EFCore\FileArchive.FileService.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\AccessControl\src\FileArchive.AccessControl.EFCore\FileArchive.AccessControl.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\File\src\FileArchive.FileService.EFCore\FileArchive.FileService.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

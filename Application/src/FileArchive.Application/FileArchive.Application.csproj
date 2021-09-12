@@ -10,10 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl.Abstract\FileArchive.AccessControl.Abstract.csproj" />
-    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl.EFCore\FileArchive.AccessControl.EFCore.csproj" />
-    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl\FileArchive.AccessControl.csproj" />
-    <ProjectReference Include="..\Application\src\FileArchive.Application.Abstract\FileArchive.Application.Abstract.csproj" />
+    <ProjectReference Include="..\..\..\AccessControl\src\FileArchive.AccessControl.Abstract\FileArchive.AccessControl.Abstract.csproj" />
+    <ProjectReference Include="..\..\..\AccessControl\src\FileArchive.AccessControl.EFCore\FileArchive.AccessControl.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\AccessControl\src\FileArchive.AccessControl\FileArchive.AccessControl.csproj" />
+    <ProjectReference Include="..\..\..\File\src\FileArchive.FileService\FileArchive.FileService.csproj" />
+    <ProjectReference Include="..\FileArchive.Application.Abstract\FileArchive.Application.Abstract.csproj" />
   </ItemGroup>
 
 </Project>
