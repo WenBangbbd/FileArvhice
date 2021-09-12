@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\AccessControl\src\FileArchive.AccessControl.Abstract\FileArchive.AccessControl.Abstract.csproj" />
+  </ItemGroup>
+
+</Project>

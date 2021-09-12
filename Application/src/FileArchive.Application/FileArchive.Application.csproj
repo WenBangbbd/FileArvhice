@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl.Abstract\FileArchive.AccessControl.Abstract.csproj" />
+    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl.EFCore\FileArchive.AccessControl.EFCore.csproj" />
+    <ProjectReference Include="..\AccessControl\src\FileArchive.AccessControl\FileArchive.AccessControl.csproj" />
+    <ProjectReference Include="..\Application\src\FileArchive.Application.Abstract\FileArchive.Application.Abstract.csproj" />
+  </ItemGroup>
+
+</Project>
