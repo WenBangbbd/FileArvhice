@@ -24,5 +24,10 @@ namespace FileArchive.AccessControl.EFCore
         {
             return await DbSet.FirstOrDefaultAsync(u => u.AccountNo == accountNo);
         }
+
+        public async Task<IUser> FindByName(string userName)
+        {
+            return await DbSet.SingleOrDefaultAsync(u => u.Name == userName);
+        }
     }
 }

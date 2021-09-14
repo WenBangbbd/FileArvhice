@@ -19,6 +19,8 @@ namespace FileArchive.Application
         Task CreateAuthorityAsync(AuthorityInput input);
         Task<IEnumerable<IAuthority>> GetAuthoritiesAsync();
         Task AllocateAuthorityAsync(string code, string authorityCode);
+        Task<IUser> GetUserByNameAsync(string userName);
+        Task UserActivateAsync(string userName, string activateCode);
     }
 
 

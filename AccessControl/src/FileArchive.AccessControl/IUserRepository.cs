@@ -9,6 +9,7 @@ namespace FileArchive.AccessControl
     {
         Task<User> FindAsync(string accountNo);
         Task<IEnumerable<User>> FindAllAsync();
+        Task<IUser> FindByName(string userName);
     }
     public interface IAuthorityRepository : IRepository<Authority>
     {

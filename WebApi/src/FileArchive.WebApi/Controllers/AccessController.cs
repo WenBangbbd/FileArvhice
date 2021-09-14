@@ -19,15 +19,25 @@ namespace FileArchive.WebApi.Controllers
             _accessControlService = accessControlService;
         }
         [HttpPost("User")]
-        public async Task CreateUserAsync(UserInput userInfo)
+        public async Task CreateUserAsync([FromBody]UserInput userInfo)
         {
             await _accessControlService.CreateUserAsync(userInfo);
         }
-        [HttpGet("User/{accountNo}")]
-        public async Task<IUser> GetUserAsync(string accountNo)
+        [HttpGet("User/{userName}")]
+        public async Task<IUser> GetUserByNameAsync(string userName)
         {
-            return await _accessControlService.GetUserAsync(accountNo);
+            return await _accessControlService.GetUserByNameAsync(userName);
         }
+        [HttpPatch("User/{userName}/{activateCode}")]
+        public async Task UserActivateAsync(string userName,string activateCode)
+        {
+            await _accessControlService.UserActivateAsync(userName, activateCode);
+        }
+        //[HttpGet("User/{accountNo}")]
+        //public async Task<IUser> GetUserAsync(string accountNo)
+        //{
+        //    return await _accessControlService.GetUserAsync(accountNo);
+        //}
         [HttpGet("User")]
         public async Task<IEnumerable<IUser>> GetUsersAsync()
         {

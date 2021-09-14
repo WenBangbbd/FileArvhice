@@ -13,6 +13,7 @@ namespace FileArchive.AccessControl
         Task AllocateAsync(string accountNo, Role role);
         Task<IUser> GetUserAsync(string accountNo);
         Task<IEnumerable<IUser>> GetUsersAsync();
+        Task<IUser> GetUserByAsync(string userName);
     }
     public class UserService : IUserService
     {
@@ -43,9 +44,15 @@ namespace FileArchive.AccessControl
             return await _userRep.FindAsync(accountNo);
         }
 
+
         public async Task<IEnumerable<IUser>> GetUsersAsync()
         {
             return await _userRep.FindAllAsync();
+        }
+
+        public async Task<IUser> GetUserByAsync(string userName)
+        {
+            return await _userRep.FindByName(userName);
         }
     }
 }

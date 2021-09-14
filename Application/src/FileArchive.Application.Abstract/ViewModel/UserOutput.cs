@@ -8,5 +8,7 @@ namespace FileArchive.AccessControl.Abstract
         public string Name { get; set; }
         public string TelePhoneNo { get; set; }
         public IEnumerable<IRole> Roles { get; set; }
+
+        public string Email { get; set; }
     }
 }

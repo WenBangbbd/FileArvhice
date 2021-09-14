@@ -13,7 +13,7 @@ namespace FileArchive.Application
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IAuthorityService _authorityService;
-
+        private readonly IAccountActivateService _activateService;
         public AccessControlService(IMapper mapper, IUserService userService, IRoleService roleService, IAuthorityService authorityService)
         {
             _mapper = mapper;
@@ -56,6 +56,8 @@ namespace FileArchive.Application
                 throw new ApplicationException("两次输入密码不一致");
             var user = _mapper.Map<User>(userInfo);
             await _userService.CreateAsync(user);
+            var activateCode = Guid.NewGuid().ToString("n");
+            await _activateService.SendActivateCodeAsync(activateCode,userInfo);
         }
 
         public async Task<IEnumerable<IAuthority>> GetAuthoritiesAsync()
@@ -75,6 +77,11 @@ namespace FileArchive.Application
             return await _userService.GetUserAsync(accountNo);
         }
 
+        public async Task<IUser> GetUserByNameAsync(string userName)
+        {
+            return await _userService.GetUserByAsync(userName);
+        }
+
         public async Task<IEnumerable<UserOutput>> GetUsersAsync()
         {
             var users = await _userService.GetUsersAsync();
@@ -84,6 +91,11 @@ namespace FileArchive.Application
         public Task ModifyPasswordAsync(string accountNo, string oldPassword, string newPassword)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task UserActivateAsync(string userName, string activateCode)
+        {
+           await _activateService.ActivateAsync(userName, activateCode);
         }
     }
 

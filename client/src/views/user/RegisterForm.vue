@@ -1,92 +1,142 @@
 <template>
   <div id="container">
-    <a-form :model="formState" :label-col="labelCol" :layout="formState.layout">
-      <a-form-item label="注册">
-        <a-input v-model:value="value" placeholder="Email" />
-      </a-form-item>
-      <a-form-item>
-        <a-input placeholder="密码" v-model:value="userName">
-          <template #prefix>
-            <LockOutlined />
-          </template>
-          <template #suffix>
-            <EyeInvisibleOutlined />
-          </template>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input placeholder="密码确认" v-model:value="userName">
-          <template #prefix>
-            <LockOutlined />
-          </template>
-          <template #suffix>
-            <EyeInvisibleOutlined />
-          </template>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <div>
-          <a-input v-model:value="value2">
-            <template #addonBefore>
-              <a-select v-model:value="value1" style="width: 90px">
-                <a-select-option value="+86">+86</a-select-option>
-                <a-select-option value="+87">+87</a-select-option>
-              </a-select>
-            </template>
-          </a-input>
-        </div>
-      </a-form-item>
-      <a-form-item>
-       <div>
-         <a-input class="vertifycode" placeholder="Password" v-model:value="userName">
+    <a-form
+      :model="formState"
+      :layout="formState.layout"
+      :rules="rules"
+      ref="formRef"
+    >
+      <a-form-item label="注册" name="email">
+        <a-input v-model:value="formState.email" placeholder="邮箱">
           <template #prefix>
             <MailOutlined />
           </template>
         </a-input>
-        <a-button class="vertify" type="primary">发送</a-button>
-       </div>
+      </a-form-item>
+      <a-form-item name="name">
+        <a-input v-model:value="formState.name" placeholder="用户名">
+          <template #prefix>
+            <UserAddOutlined />
+          </template>
+        </a-input>
+      </a-form-item>
+      <a-form-item name="password">
+        <a-input-password placeholder="密码" v-model:value="formState.password">
+          <template #prefix>
+            <LockOutlined />
+          </template>
+          <template #suffix>
+            <EyeInvisibleOutlined />
+          </template>
+        </a-input-password>
+      </a-form-item>
+      <a-form-item name="confirmedPassword">
+        <a-input-password
+          placeholder="密码确认"
+          v-model:value="formState.confirmedPassword"
+        >
+          <template #prefix>
+            <LockOutlined />
+          </template>
+          <template #suffix>
+            <EyeInvisibleOutlined />
+          </template>
+        </a-input-password>
       </a-form-item>
       <a-form-item>
-        <a-button class="register" type="primary">注册</a-button>
-        <router-link class="haveaccount" :to="{name:'login'}">已有账号</router-link>
+        <a-button class="register" type="primary" @click="onSubmit()"
+          >注册</a-button
+        >
+        <router-link class="haveaccount" :to="{ name: 'login' }"
+          >已有账号</router-link
+        >
       </a-form-item>
     </a-form>
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref, toRaw } from "vue";
-import { LockOutlined, EyeInvisibleOutlined,MailOutlined } from "@ant-design/icons-vue";
+import { defineComponent, reactive, ref } from "vue";
+import {
+  LockOutlined,
+  EyeInvisibleOutlined,
+  MailOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons-vue";
+import { register, isUserNameInvalid } from "../../api/login";
 export default defineComponent({
   components: {
     LockOutlined,
     EyeInvisibleOutlined,
-    MailOutlined
+    MailOutlined,
+    UserAddOutlined,
   },
   setup() {
+    const formRef = ref();
     const formState = reactive({
+      email: "",
       name: "",
-      region: undefined,
-      date1: undefined,
-      delivery: false,
-      type: [],
-      resource: "",
-      desc: "",
+      password: "",
+      confirmedPassword: "",
       layout: "vertical",
     });
-    const onSubmit = () => {
-      console.log("submit!", toRaw(formState));
+    let validatePass2 = async (rule, value) => {
+      if (value === "") {
+        return Promise.reject("请输入密码");
+      } else if (value !== formState.password) {
+        return Promise.reject("两次输入的密码不一致");
+      } else {
+        return Promise.resolve();
+      }
     };
+    let validateName = async (rule, value) => {
+      if (value === "") {
+        return Promise.reject("请输入用户名");
+      }
+      if (value.length < 3 || value.length > 20) {
+        return Promise.reject("用户名长度必须为3~10个字符");
+      }
+      let isValid = await isUserNameInvalid(value);
+      if (isValid === false) {
+        return Promise.reject("用户名已存在");
+      }
+      return Promise.resolve();
+    };
+    const rules = {
+      name: [{ validator: validateName, trigger: "blur" }],
+      email: [
+        { required: true, message: "请输入邮箱", trigger: "blur" },
+        {
+          pattern:
+            "^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$",
+          message: "邮箱无效",
+          trigger: "blur",
+        },
+      ],
 
-    const value1 = ref("+86");
+      password: [
+        { required: true, message: "请输入密码", trigger: "blur" },
+        { min: 5, max: 20, message: "密码长度在5~20", trigger: "blur" },
+      ],
+      confirmedPassword: [{ validator: validatePass2, trigger: "change" }],
+    };
+    const onSubmit = () => {
+      console.log(formState);
+      formRef.value
+        .validate()
+        .then(() => {
+          register(formState).then((response) => {
+            console.log(response);
+          });
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    };
     return {
-      value1,
-      labelCol: {
-        span: 4,
-      },
-      wrapperCol: {
-        span: 14,
-      },
+      formRef,
       formState,
+      rules,
+      validatePass2,
       onSubmit,
     };
   },
@@ -101,16 +151,16 @@ export default defineComponent({
     width: 400px;
     margin: 0 auto;
   }
-  .vertifycode{
+  .vertifycode {
     width: 320px;
   }
-  .vertify{
+  .vertify {
     float: right;
   }
-  .register{
+  .register {
     width: 320px;
   }
-  .haveaccount{
+  .haveaccount {
     float: right;
     padding-top: 5px;
   }

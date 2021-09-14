@@ -32,7 +32,7 @@ namespace FileArchive.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileArchive.WebApi v1"));
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
@@ -52,16 +52,16 @@ namespace FileArchive.WebApi
 
             var fileOptions = Configuration.GetSection(FileServiceOptions.Position);
             services.Configure<FileServiceOptions>(fileOptions);
-            services.AddFileServices();
-            services.AddFileRepositories(builder =>
-            {
-                builder.UseMySql("server=localhost;port=3306;database=filearchives;uid=root;pwd=123456", ServerVersion.Parse("5.7.18"));
-            });
+            //services.AddFileServices();
+            //services.AddFileRepositories(builder =>
+            //{
+            //    builder.UseSqlServer("Data Source=localhost;Initial Catalog=fileArchive;Persist Security Info=True;User ID=sa;Password=123456;MultipleActiveResultSets=True");
+            //});
 
             services.AddApplicationServices(builder =>
             {
                 builder
-                .UseMySql("server=localhost;port=3306;database=filearchives;uid=root;pwd=123456", ServerVersion.Parse("5.7.18"))
+                .UseSqlServer("Data Source=localhost;Initial Catalog=fileArchive;Persist Security Info=True;User ID=sa;Password=123456;MultipleActiveResultSets=True")
                 .UseLoggerFactory(LoggerFactory);
             });
 

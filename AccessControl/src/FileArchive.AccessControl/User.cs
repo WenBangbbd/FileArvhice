@@ -23,5 +23,7 @@ namespace FileArchive.AccessControl
         public List<RoleUser> RoleUsers { get; set; }
 
         public IEnumerable<IRole> Roles => RoleUsers.Select(r => r.Role);
+
+        public string Email { get; set; }
     }
 }

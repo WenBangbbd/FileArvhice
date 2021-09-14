@@ -11,7 +11,8 @@ namespace FileArchive.Application
         public AccessProfile()
         {
             
-            CreateMap<UserInput, User>();
+            CreateMap<UserInput, User>()
+                .ForMember(des=>des.Roles,opt=>opt.Ignore());
             CreateMap<RoleInput, Role>();
             CreateMap<IUser, UserOutput>()
                 .ForMember(des => des.Roles, opt => opt.MapFrom<UserOutputResolver>());

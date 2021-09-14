@@ -3,46 +3,44 @@ using System;
 using FileArchive.AccessControl.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FileArchive.EFCore.Migrations.Migrations
 {
     [DbContext(typeof(AccessContext))]
-    [Migration("20210829021001_roleuser")]
-    partial class roleuser
+    [Migration("20210914075321_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.9");
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.9")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FileArchive.AccessControl.Authority", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ModifyDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Authority");
                 });
@@ -51,23 +49,45 @@ namespace FileArchive.EFCore.Migrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ModifyDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("FileArchive.AccessControl.RoleAuthority", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifyDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RoleId", "AuthorityId");
+
+                    b.HasIndex("AuthorityId");
+
+                    b.ToTable("RoleAuthority");
                 });
 
             modelBuilder.Entity("FileArchive.AccessControl.RoleUser", b =>
@@ -79,10 +99,10 @@ namespace FileArchive.EFCore.Migrations.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ModifyDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("RoleId", "UserId");
 
@@ -95,36 +115,52 @@ namespace FileArchive.EFCore.Migrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AccountNo")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifyDateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TelePhoneNo")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("FileArchive.AccessControl.Authority", b =>
+            modelBuilder.Entity("FileArchive.AccessControl.RoleAuthority", b =>
                 {
-                    b.HasOne("FileArchive.AccessControl.Role", null)
-                        .WithMany("Authorities")
-                        .HasForeignKey("RoleId");
+                    b.HasOne("FileArchive.AccessControl.Authority", "Authority")
+                        .WithMany("RoleAuthorities")
+                        .HasForeignKey("AuthorityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FileArchive.AccessControl.Role", "Role")
+                        .WithMany("RoleAuthorities")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Authority");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("FileArchive.AccessControl.RoleUser", b =>
@@ -146,9 +182,14 @@ namespace FileArchive.EFCore.Migrations.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FileArchive.AccessControl.Authority", b =>
+                {
+                    b.Navigation("RoleAuthorities");
+                });
+
             modelBuilder.Entity("FileArchive.AccessControl.Role", b =>
                 {
-                    b.Navigation("Authorities");
+                    b.Navigation("RoleAuthorities");
 
                     b.Navigation("RoleUsers");
                 });

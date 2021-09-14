@@ -6,6 +6,7 @@ namespace FileArchive.AccessControl.Abstract
     {
         public string Name { get; }
         public string TelePhoneNo { get; }
+        public string Email { get; }
         public IEnumerable<IRole> Roles { get;}
     }
 }
