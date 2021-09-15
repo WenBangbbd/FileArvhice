@@ -28,7 +28,7 @@ namespace FileArchive.WebApi.Controllers
         {
             return await _accessControlService.GetUserByNameAsync(userName);
         }
-        [HttpPatch("User/{userName}/{activateCode}")]
+        [HttpGet("User/{userName}/{activateCode}")]
         public async Task UserActivateAsync(string userName,string activateCode)
         {
             await _accessControlService.UserActivateAsync(userName, activateCode);

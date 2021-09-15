@@ -4,14 +4,16 @@ using FileArchive.AccessControl.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FileArchive.EFCore.Migrations.Migrations
 {
     [DbContext(typeof(AccessContext))]
-    partial class AccessContextModelSnapshot : ModelSnapshot
+    [Migration("20210915061033_addartivate")]
+    partial class addartivate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

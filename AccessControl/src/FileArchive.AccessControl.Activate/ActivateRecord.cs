@@ -1,4 +1,4 @@
-﻿namespace FileArchive.Application
+﻿namespace FileArchive.AccessControl.Activate
 {
     public class ActivateRecord
     {

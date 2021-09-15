@@ -1,4 +1,4 @@
-﻿using FileArchive.Application;
+﻿
 using Infrastructure.EFCore;
 using JetBrains.Annotations;
 using System;
@@ -8,11 +8,11 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using FileArchive.AccessControl.Activate;
 
-namespace FileArchive.Applicaiton.EFCore
+namespace FileArchive.AccessControl.EFCore
 {
-    public class ActivateRecordRepository : EFBaseRepository<ApplicaitonContext, ActivateRecord>, IActivateRecordRepository
+    public class ActivateRecordRepository : EFBaseRepository<AccessContext, ActivateRecord>, IActivateRecordRepository
     {
-        public ActivateRecordRepository(ApplicaitonContext context) : base(context)
+        public ActivateRecordRepository(AccessContext context) : base(context)
         {
         }
 

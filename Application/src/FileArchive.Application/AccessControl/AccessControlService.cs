@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FileArchive.AccessControl;
 using FileArchive.AccessControl.Abstract;
+using FileArchive.AccessControl.Activate;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,12 +15,13 @@ namespace FileArchive.Application
         private readonly IRoleService _roleService;
         private readonly IAuthorityService _authorityService;
         private readonly IAccountActivateService _activateService;
-        public AccessControlService(IMapper mapper, IUserService userService, IRoleService roleService, IAuthorityService authorityService)
+        public AccessControlService(IMapper mapper, IUserService userService, IRoleService roleService, IAuthorityService authorityService, IAccountActivateService activateService)
         {
             _mapper = mapper;
             _userService = userService;
             _roleService = roleService;
             _authorityService = authorityService;
+            _activateService = activateService;
         }
 
         public async Task AllocateAuthorityAsync(string roleCode, string authorityCode)

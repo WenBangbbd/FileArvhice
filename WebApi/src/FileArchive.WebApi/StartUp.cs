@@ -1,4 +1,6 @@
-﻿using FileArchive.FileService;
+﻿using FileArchive.AccessControl.Activate;
+using FileArchive.Application;
+using FileArchive.FileService;
 using FileArchive.WebApi.Filter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,21 +52,19 @@ namespace FileArchive.WebApi
                 //c.OperationFilter<SwaggerFileUploadFilter>();
             });
 
-            var fileOptions = Configuration.GetSection(FileServiceOptions.Position);
-            services.Configure<FileServiceOptions>(fileOptions);
-            //services.AddFileServices();
-            //services.AddFileRepositories(builder =>
-            //{
-            //    builder.UseSqlServer("Data Source=localhost;Initial Catalog=fileArchive;Persist Security Info=True;User ID=sa;Password=123456;MultipleActiveResultSets=True");
-            //});
-
-            services.AddApplicationServices(builder =>
+            var conStr = "Data Source=localhost;Initial Catalog=fileArchive;Persist Security Info=True;User ID=sa;Password=123456;MultipleActiveResultSets=True";
+            services.ConfigFileArchive(cfg =>
             {
-                builder
-                .UseSqlServer("Data Source=localhost;Initial Catalog=fileArchive;Persist Security Info=True;User ID=sa;Password=123456;MultipleActiveResultSets=True")
-                .UseLoggerFactory(LoggerFactory);
+                cfg.ConfigAccess(accCfg =>
+                {
+                    accCfg.AddAccessRepositories(builder => builder.UseSqlServer(conStr));
+                });
+                cfg.ConfigActivate(acCfg =>
+                {
+                    acCfg.AddActivateRepositories(builder => builder.UseSqlServer(conStr));
+                    acCfg.AddActivateServices(option => Configuration.GetSection(ActivateOptions.Position).Bind(option));
+                });
             });
-
         }
     }
 }

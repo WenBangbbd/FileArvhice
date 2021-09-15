@@ -6,15 +6,16 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace FileArchive.Application
+namespace FileArchive.AccessControl.Activate
 {
     public class EmailAccountActivateService : IAccountActivateService
     {
-        public readonly IOptions<EmailActivateOptions> _options;
+        public readonly IOptions<ActivateOptions> _options;
         public readonly IActivateRecordRepository _activateRep;
-        public EmailAccountActivateService(IOptions<EmailActivateOptions> options)
+        public EmailAccountActivateService(IOptions<ActivateOptions> options, IActivateRecordRepository activateRep)
         {
             _options = options;
+            _activateRep = activateRep;
         }
         public async Task ActivateAsync(string userName, string activateCode)
         {
@@ -27,7 +28,7 @@ namespace FileArchive.Application
             await _activateRep.UpdateAsync(record);
         }
 
-        public async Task SendActivateCodeAsync(string activateCode, UserInput userInfo)
+        public async Task SendActivateCodeAsync(string activateCode, IUser userInfo)
         {
             var mailClient = new SmtpClient(_options.Value.Domain);
             mailClient.EnableSsl = true;
@@ -38,13 +39,22 @@ namespace FileArchive.Application
             //信息，
             var message = new MailMessage(new MailAddress(_options.Value.MailUserName), new MailAddress(userInfo.Email));
             message.IsBodyHtml = false;
-            message.Body = new PathString(_options.Value.ActivatePath)
-                                .Add(userInfo.Name)
-                                .Add(activateCode);
+
+            var uriBuilder = new UriBuilder();
+            var uri = new Uri(_options.Value.ActivatePath);
+            uriBuilder.Scheme = uri.Scheme;
+            uriBuilder.Host = uri.Host;
+            uriBuilder.Port = uri.Port;
+            var path = new PathString(uri.LocalPath)
+                .Add($"/{userInfo.Name}")
+                     .Add($"/{activateCode}");
+            uriBuilder.Path = path;
+            var urii = uriBuilder.Uri.ToString();
+            message.Body = urii;
             message.Subject = _options.Value.MailSubject;
             //发送邮件
             mailClient.Send(message);
-           await _activateRep.InsertAsync(new ActivateRecord { ActivateCode = activateCode, UserName = userInfo.Name, Activated = false });
+            await _activateRep.InsertAsync(new ActivateRecord { ActivateCode = activateCode, UserName = userInfo.Name, Activated = false });
         }
     }
 }

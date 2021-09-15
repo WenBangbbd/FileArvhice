@@ -45,7 +45,7 @@
       </a-form-item>
       <a-form-item>
         <a-button class="register" type="primary" @click="onSubmit()"
-          >注册</a-button
+          >继续</a-button
         >
         <router-link class="haveaccount" :to="{ name: 'login' }"
           >已有账号</router-link

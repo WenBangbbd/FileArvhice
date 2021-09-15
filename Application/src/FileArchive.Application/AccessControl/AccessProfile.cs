@@ -9,8 +9,7 @@ namespace FileArchive.Application
     public class AccessProfile : Profile
     {
         public AccessProfile()
-        {
-            
+        {            
             CreateMap<UserInput, User>()
                 .ForMember(des=>des.Roles,opt=>opt.Ignore());
             CreateMap<RoleInput, Role>();

@@ -7,18 +7,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper.Configuration;
+using FileArchive.AccessControl.EFCore;
+using FileArchive.AccessControl;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-   public static class ServiceCollectonExtension
+    public static class ServiceCollectonExtension
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction = null)
+        public static IServiceCollection ConfigFileArchive(this IServiceCollection services, Action<IFileArchiveBuilder> cfg)
         {
-            services.AddAccessRepositories(optionsAction);
-            services.AddAccessServices();
-            services.AddScoped<IAccessControlService, AccessControlService>();           
-            services.AddAutoMapper(typeof(AccessProfile));
+            var builder = new FileArchiveBuilder(services);
+            cfg(builder);
+            builder.AddApplicationServices();
             return services;
         }
+
+        public static IFileArchiveBuilder AddApplicationServices(this IFileArchiveBuilder builder)
+        {
+            builder.Services
+                .AddScoped<IAccessControlService, AccessControlService>()
+                .AddAutoMapper(typeof(AccessProfile));
+            return builder;
+        }
     }
+
+    public class FileArchiveBuilder : IFileArchiveBuilder
+    {
+        public IServiceCollection Services { get; }
+
+        public FileArchiveBuilder(IServiceCollection services)
+        {
+            Services = services;
+        }
+    }
+
+    public static class FileArchiveExtension
+    {
+        public static IFileArchiveBuilder ConfigAccess(this IFileArchiveBuilder builder, Action<IAccessBuilder> cfg)
+        {
+            builder.Services.ConfigAccess(cfg);
+            return builder;
+        }
+        public static IFileArchiveBuilder ConfigActivate(this IFileArchiveBuilder builder,Action<IActivateBuilder> cfg)
+        {
+            builder.Services.ConfigActivate(cfg);
+            return builder;
+        }
+    }
+
+    public interface IFileArchiveBuilder
+    {
+        IServiceCollection Services { get; }
+    }
+
 }

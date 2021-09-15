@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FileArchive.AccessControl.Activate;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
@@ -37,6 +38,7 @@ namespace FileArchive.AccessControl.EFCore
                 .HasOne(r => r.Role)
                 .WithMany(r => r.RoleAuthorities)
                 .HasForeignKey(r => r.RoleId);
+            modelBuilder.Entity<ActivateRecord>();
         }
 
     }

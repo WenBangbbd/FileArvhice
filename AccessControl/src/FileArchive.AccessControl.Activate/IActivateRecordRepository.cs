@@ -1,7 +1,8 @@
-﻿using Infrastructure.EFCore;
+﻿
+using Infrastructure.EFCore;
 using System.Threading.Tasks;
 
-namespace FileArchive.Application
+namespace FileArchive.AccessControl.Activate
 {
     public interface IActivateRecordRepository : IRepository<ActivateRecord>
     {

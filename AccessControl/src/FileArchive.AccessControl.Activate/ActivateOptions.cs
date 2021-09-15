@@ -1,6 +1,6 @@
-﻿namespace FileArchive.Application
+﻿namespace FileArchive.AccessControl.Activate
 {
-    public class EmailActivateOptions
+    public class ActivateOptions
     {
         public const string Position = "EmailActivate";
         /// <summary>

@@ -33,7 +33,7 @@ namespace FileArchive.AccessControl
 
         public async Task CreateAsync(User user)
         {
-            User user1 = await _userRep.FindAsync(user.AccountNo);
+            var user1 = await _userRep.FindByNameAsync(user.Name);
             if (user1 != null)
                 throw new ApplicationException("用户名已存在");
             await _userRep.InsertAsync(user);
@@ -52,7 +52,7 @@ namespace FileArchive.AccessControl
 
         public async Task<IUser> GetUserByAsync(string userName)
         {
-            return await _userRep.FindByName(userName);
+            return await _userRep.FindByNameAsync(userName);
         }
     }
 }

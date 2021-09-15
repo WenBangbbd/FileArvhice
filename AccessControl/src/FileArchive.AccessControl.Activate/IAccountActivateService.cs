@@ -5,11 +5,11 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileArchive.Application
+namespace FileArchive.AccessControl.Activate
 {
     public interface IAccountActivateService
     {
-        Task SendActivateCodeAsync(string activateCode, UserInput userInfo);
+        Task SendActivateCodeAsync(string activateCode, IUser userInfo);
         Task ActivateAsync(string userName, string activateCode);
     }
 }

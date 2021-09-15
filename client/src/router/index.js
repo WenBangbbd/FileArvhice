@@ -15,6 +15,12 @@ const routes=[{
             name: 'register',
             path:'/user/register',
             component:()=>import('../views/user/RegisterForm')
+        },
+        {
+            name:'vertifyEmail',
+            path:'/user/vertifyEmail',
+            component:()=>import('../views/user/VertifyEmail'),
+            props:true
         }
     ]
 }]
