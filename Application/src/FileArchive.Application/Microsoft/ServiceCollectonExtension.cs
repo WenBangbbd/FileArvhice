@@ -26,6 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services
                 .AddScoped<IAccessControlService, AccessControlService>()
+                .AddScoped<IVertifyCodeCreateService, VertifyCodeCreateService>()
                 .AddAutoMapper(typeof(AccessProfile));
             return builder;
         }

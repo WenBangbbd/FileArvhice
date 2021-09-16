@@ -21,6 +21,7 @@ namespace FileArchive.Application
         Task AllocateAuthorityAsync(string code, string authorityCode);
         Task<IUser> GetUserByNameAsync(string userName);
         Task UserActivateAsync(string userName, string activateCode);
+        Task<string> VertifyEmailAsync(string email);
     }
 
 

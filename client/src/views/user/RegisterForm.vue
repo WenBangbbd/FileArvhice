@@ -1,27 +1,30 @@
 <template>
   <div id="container">
     <a-form
-      :model="formState"
+      :model="formState.user"
       :layout="formState.layout"
       :rules="rules"
       ref="formRef"
     >
       <a-form-item label="注册" name="email">
-        <a-input v-model:value="formState.email" placeholder="邮箱">
+        <a-input v-model:value="formState.user.email" placeholder="邮箱">
           <template #prefix>
             <MailOutlined />
           </template>
         </a-input>
       </a-form-item>
       <a-form-item name="name">
-        <a-input v-model:value="formState.name" placeholder="用户名">
+        <a-input v-model:value="formState.user.name" placeholder="用户名">
           <template #prefix>
             <UserAddOutlined />
           </template>
         </a-input>
       </a-form-item>
       <a-form-item name="password">
-        <a-input-password placeholder="密码" v-model:value="formState.password">
+        <a-input-password
+          placeholder="密码"
+          v-model:value="formState.user.password"
+        >
           <template #prefix>
             <LockOutlined />
           </template>
@@ -33,7 +36,7 @@
       <a-form-item name="confirmedPassword">
         <a-input-password
           placeholder="密码确认"
-          v-model:value="formState.confirmedPassword"
+          v-model:value="formState.user.confirmedPassword"
         >
           <template #prefix>
             <LockOutlined />
@@ -62,7 +65,8 @@ import {
   MailOutlined,
   UserAddOutlined,
 } from "@ant-design/icons-vue";
-import { register, isUserNameInvalid } from "../../api/login";
+import { useRouter } from "vue-router";
+import { isUserNameInvalid, emailVertify } from "../../api/login";
 export default defineComponent({
   components: {
     LockOutlined,
@@ -73,16 +77,19 @@ export default defineComponent({
   setup() {
     const formRef = ref();
     const formState = reactive({
-      email: "",
-      name: "",
-      password: "",
-      confirmedPassword: "",
+      user: {
+        vertifyCode: "",
+        email: "763111123@qq.com",
+        name: "weeeee",
+        password: "123456",
+        confirmedPassword: "123456",
+      },
       layout: "vertical",
     });
     let validatePass2 = async (rule, value) => {
       if (value === "") {
         return Promise.reject("请输入密码");
-      } else if (value !== formState.password) {
+      } else if (value !== formState.user.password) {
         return Promise.reject("两次输入的密码不一致");
       } else {
         return Promise.resolve();
@@ -119,19 +126,20 @@ export default defineComponent({
       ],
       confirmedPassword: [{ validator: validatePass2, trigger: "change" }],
     };
+    const router = useRouter();
     const onSubmit = () => {
-      console.log(formState);
       formRef.value
         .validate()
-        .then(() => {
-          register(formState).then((response) => {
-            console.log(response);
-          });
+        .then(async () => {
+          formState.user.vertifyCode = await emailVertify(formState.user.email);
+          console.log(formState.user);
+          router.push({ path: `vertifyEmail/${formState.user.email}`, params: {user:formState.user} });
         })
         .catch((error) => {
           console.log("error", error);
         });
     };
+
     return {
       formRef,
       formState,

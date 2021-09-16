@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FileArchive.WebApi.Controllers
@@ -19,7 +20,7 @@ namespace FileArchive.WebApi.Controllers
             _accessControlService = accessControlService;
         }
         [HttpPost("User")]
-        public async Task CreateUserAsync([FromBody]UserInput userInfo)
+        public async Task CreateUserAsync([FromBody] UserInput userInfo)
         {
             await _accessControlService.CreateUserAsync(userInfo);
         }
@@ -29,9 +30,14 @@ namespace FileArchive.WebApi.Controllers
             return await _accessControlService.GetUserByNameAsync(userName);
         }
         [HttpGet("User/{userName}/{activateCode}")]
-        public async Task UserActivateAsync(string userName,string activateCode)
+        public async Task UserActivateAsync(string userName, string activateCode)
         {
             await _accessControlService.UserActivateAsync(userName, activateCode);
+        }
+        [HttpPost("User/VertifyEmail")]
+        public async Task<string> VertifyEmailAsync([FromBody] string email)
+        {
+            return await _accessControlService.VertifyEmailAsync(email);
         }
         //[HttpGet("User/{accountNo}")]
         //public async Task<IUser> GetUserAsync(string accountNo)
@@ -74,7 +80,7 @@ namespace FileArchive.WebApi.Controllers
             return await _accessControlService.GetAuthoritiesAsync();
         }
         [HttpPost("Role/{roleCode}")]
-        public async Task AllocateAuthorityAsync(string roleCode,string authorityCode)
+        public async Task AllocateAuthorityAsync(string roleCode, string authorityCode)
         {
             await _accessControlService.AllocateAuthorityAsync(roleCode, authorityCode);
         }

@@ -11,5 +11,6 @@ namespace FileArchive.AccessControl.Activate
     {
         Task SendActivateCodeAsync(string activateCode, IUser userInfo);
         Task ActivateAsync(string userName, string activateCode);
+        Task SendEmailAsync(string email, string content);
     }
 }

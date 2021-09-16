@@ -18,7 +18,8 @@ const routes=[{
         },
         {
             name:'vertifyEmail',
-            path:'/user/vertifyEmail',
+            path:'/user/vertifyEmail/:email',
+            // path:'/user/vertifyEmail',
             component:()=>import('../views/user/VertifyEmail'),
             props:true
         }

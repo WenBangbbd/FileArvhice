@@ -14,8 +14,16 @@ export function register(user) {
         data: user
     })
 }
-export async function isUserNameInvalid(name) {
 
+export async function emailVertify(email) {
+    return await requet({
+        url: `api/Access/User/VertifyEmail/`,
+        method: 'post',
+        data:email
+    })
+}
+
+export async function isUserNameInvalid(name) {
     let isValid = false;
     let value = await requet({
         url: `api/Access/User/${name}`,

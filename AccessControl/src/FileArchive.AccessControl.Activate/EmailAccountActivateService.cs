@@ -30,16 +30,6 @@ namespace FileArchive.AccessControl.Activate
 
         public async Task SendActivateCodeAsync(string activateCode, IUser userInfo)
         {
-            var mailClient = new SmtpClient(_options.Value.Domain);
-            mailClient.EnableSsl = true;
-            mailClient.UseDefaultCredentials = false;
-
-            //授权,不是密码
-            mailClient.Credentials = new NetworkCredential(_options.Value.MailUserName, _options.Value.MailPassword);
-            //信息，
-            var message = new MailMessage(new MailAddress(_options.Value.MailUserName), new MailAddress(userInfo.Email));
-            message.IsBodyHtml = false;
-
             var uriBuilder = new UriBuilder();
             var uri = new Uri(_options.Value.ActivatePath);
             uriBuilder.Scheme = uri.Scheme;
@@ -49,12 +39,26 @@ namespace FileArchive.AccessControl.Activate
                 .Add($"/{userInfo.Name}")
                      .Add($"/{activateCode}");
             uriBuilder.Path = path;
-            var urii = uriBuilder.Uri.ToString();
-            message.Body = urii;
-            message.Subject = _options.Value.MailSubject;
-            //发送邮件
-            mailClient.Send(message);
+            var content = uriBuilder.Uri.ToString();
+
+            await SendEmailAsync(userInfo.Email, content);
             await _activateRep.InsertAsync(new ActivateRecord { ActivateCode = activateCode, UserName = userInfo.Name, Activated = false });
+        }
+
+        public async Task SendEmailAsync(string email, string content)
+        {
+            var mailClient = new SmtpClient(_options.Value.Domain);
+            mailClient.EnableSsl = true;
+            mailClient.UseDefaultCredentials = false;
+            //授权,不是密码
+            mailClient.Credentials = new NetworkCredential(_options.Value.MailUserName, _options.Value.MailPassword);
+            //信息，
+            var message = new MailMessage(new MailAddress(_options.Value.MailUserName), new MailAddress(email));
+
+            message.Subject = _options.Value.MailSubject;
+            message.Body = content;
+            message.IsBodyHtml = false;
+            mailClient.Send(message);
         }
     }
 }

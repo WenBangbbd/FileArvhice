@@ -15,13 +15,15 @@ namespace FileArchive.Application
         private readonly IRoleService _roleService;
         private readonly IAuthorityService _authorityService;
         private readonly IAccountActivateService _activateService;
-        public AccessControlService(IMapper mapper, IUserService userService, IRoleService roleService, IAuthorityService authorityService, IAccountActivateService activateService)
+        private readonly IVertifyCodeCreateService _vertifyCodeCreateService;
+        public AccessControlService(IMapper mapper, IUserService userService, IRoleService roleService, IAuthorityService authorityService, IAccountActivateService activateService, IVertifyCodeCreateService vertifyCodeCreateService)
         {
             _mapper = mapper;
             _userService = userService;
             _roleService = roleService;
             _authorityService = authorityService;
             _activateService = activateService;
+            _vertifyCodeCreateService = vertifyCodeCreateService;
         }
 
         public async Task AllocateAuthorityAsync(string roleCode, string authorityCode)
@@ -59,7 +61,7 @@ namespace FileArchive.Application
             var user = _mapper.Map<User>(userInfo);
             await _userService.CreateAsync(user);
             var activateCode = Guid.NewGuid().ToString("n");
-            await _activateService.SendActivateCodeAsync(activateCode,userInfo);
+            await _activateService.SendActivateCodeAsync(activateCode, userInfo);
         }
 
         public async Task<IEnumerable<IAuthority>> GetAuthoritiesAsync()
@@ -97,9 +99,15 @@ namespace FileArchive.Application
 
         public async Task UserActivateAsync(string userName, string activateCode)
         {
-           await _activateService.ActivateAsync(userName, activateCode);
+            await _activateService.ActivateAsync(userName, activateCode);
+        }
+
+        public async Task<string> VertifyEmailAsync(string email)
+        {
+            //var vertifyCode = await _vertifyCodeCreateService.CreateAsync();
+            var vertifyCode = "1111";
+            //await _activateService.SendEmailAsync(email, $"邮箱验证码：{vertifyCode}");
+            return vertifyCode;
         }
     }
-
-
 }
